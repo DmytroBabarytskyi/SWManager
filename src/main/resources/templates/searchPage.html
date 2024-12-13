@@ -1,0 +1,284 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Search</title>
+
+    <meta charset="UTF-8"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- See configuration in WebMvConfig.java -->
+    <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet" media="screen"/>
+
+
+    <script th:src="@{/jquery/jquery.min.js}"></script>
+    <script th:src="@{/popper/popper.min.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+
+
+    <style>
+        table {
+            width: 100%;
+            min-height: 350px;
+            border-collapse: collapse; /* Об’єдння меж */
+            margin: 20px 0; /* Простір над і під таблицею */
+            font-family: Arial, sans-serif; /* Шрифт для таблиці */
+        }
+
+        table th, table td {
+            padding: 12px; /* Простір у клітинках */
+            text-align: center; /* Вирівняти текст по центру */
+            border: 1px solid #888888; /* Сіра рамка */
+        }
+
+        table th {
+            background-color: #000407; /* Чорний фон для заголовка */
+            color: #f5f7f7; /* Білий текст */
+            font-weight: bold; /* Жирний текст */
+        }
+
+        table td {
+            vertical-align: middle; /* Центрування вмісту вертикально */
+        }
+    </style>
+
+</head>
+
+<body>
+<!-- Include _menu.html -->
+<th:block th:include="/_menu"></th:block>
+
+<div class="container">
+    <h2>Search</h2>
+
+    <label for="dataSelect">Select Data Type:</label>
+    <select id="dataSelect" class="form-control" onchange="toggleTable()">
+        <option value="students">Students</option>
+        <option value="publications">Publications</option>
+        <option value="abstracts">Abstract</option>
+        <option value="conferences">Conferences</option>
+        <option value="advisors">Research Advisors</option>
+        <option value="groups">Groups</option>
+        <option value="publishers">Publishers</option>
+    </select>
+
+    <div id="studentTable" class="data-table">
+        <h3>Students</h3>
+        <input type="text" id="studentSearch" placeholder="Search by name or group" onkeyup="searchTable('studentTable', 'studentSearch')" class="form-control" />
+        <table class="table table-hover">
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Group</th>
+                <th>Phone number</th>
+                <th>Email</th>
+                <th>Number of Works</th>
+            </tr>
+            <tr th:each="studentInfo : ${allStudents}">
+                <td th:utext="${studentInfo.id}">..</td>
+                <td th:utext="${studentInfo.name}">..</td>
+                <td th:utext="${studentInfo.surname}">..</td>
+                <td th:utext="${studentInfo.group}">..</td>
+                <td th:utext="${studentInfo.phoneNumber}">..</td>
+                <td th:utext="${studentInfo.email}">..</td>
+                <td th:utext="${studentInfo.numberOfWorks}">..</td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="publicationTable" class="data-table" style="display:none;">
+        <h3>Publications</h3>
+        <input type="text" id="publicationSearch" placeholder="Search by topic or publisher" onkeyup="searchTable('publicationTable', 'publicationSearch')" class="form-control" />
+        <table class="table table-hover">
+            <tr>
+                <th>ID</th>
+                <th>Topic</th>
+                <th>Type</th>
+                <th>Author</th>
+                <th>Journal Number</th>
+                <th>Publisher</th>
+                <th>Date</th>
+            </tr>
+            <tr th:each="publication : ${allPublications}">
+                <td th:utext="${publication.id}">..</td>
+                <td th:utext="${publication.topic}">..</td>
+                <td th:utext="${publication.type}">..</td>
+                <td th:utext="${publication.author}">..</td>
+                <td th:utext="${publication.publicationNumber}">..</td>
+                <td th:utext="${publication.publisher}">..</td>
+                <td th:utext="${publication.publicationDate}">..</td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="abstractTable" class="data-table" style="display:none;">
+        <h3>Abstracts</h3>
+        <input type="text" id="abstractSearch" placeholder="Search by topic" onkeyup="searchTable('abstractTable', 'abstractSearch')" class="form-control" />
+        <table class="table table-hover">
+            <tr>
+                <th>ID</th>
+                <th>Topic</th>
+                <th>Type</th>
+                <th>Author</th>
+                <th>Conference</th>
+            </tr>
+            <tr th:each="abstract : ${allAbstracts}">
+                <td th:utext="${abstract.id}">..</td>
+                <td th:utext="${abstract.topic}">..</td>
+                <td th:utext="${abstract.type}">..</td>
+                <td th:utext="${abstract.author}">..</td>
+                <td th:utext="${abstract.conferenceName}">..</td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="conferenceTable" class="data-table" style="display:none;">
+        <h3>Conferences</h3>
+        <input type="text" id="conferenceSearch" placeholder="Search by name or type" onkeyup="searchTable('conferenceTable', 'conferenceSearch')" class="form-control" />
+        <table class="table table-hover">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>State</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+            </tr>
+            <tr th:each="conference : ${allConferences}">
+                <td th:utext="${conference.id}">..</td>
+                <td th:utext="${conference.name}">..</td>
+                <td th:utext="${conference.type}">..</td>
+                <td th:utext="${conference.state}">..</td>
+                <td th:utext="${conference.startDate}">..</td>
+                <td th:utext="${conference.endDate}">..</td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="advisorTable" class="data-table" style="display: none;">
+        <h3>Research Advisors</h3>
+        <input type="text" id="advisorSearch" placeholder="Search by name or faculty" onkeyup="searchTable('advisorTable', 'advisorSearch')" class="form-control" />
+        <table class="table table-hover">
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Phone number</th>
+                <th>Email</th>
+                <th>Faculty</th>
+                <th>Number of Works</th>
+            </tr>
+            <tr th:each="advisorInfo : ${allResearchAdvisors}">
+                <td th:utext="${advisorInfo.id}">..</td>
+                <td th:utext="${advisorInfo.name}">..</td>
+                <td th:utext="${advisorInfo.surname}">..</td>
+                <td th:utext="${advisorInfo.phoneNumber}">..</td>
+                <td th:utext="${advisorInfo.email}">..</td>
+                <td th:utext="${advisorInfo.faculty}">..</td>
+                <td th:utext="${advisorInfo.numberOfWorks}">..</td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="groupTable" class="data-table" style="display:none;">
+        <h3>Groups</h3>
+        <input type="text" id="groupSearch" placeholder="Search by number or program" onkeyup="searchTable('groupTable', 'groupSearch')" class="form-control" />
+        <table class="table table-hover">
+            <tr>
+                <th>ID</th>
+                <th>Number</th>
+                <th>Educational Program</th>
+                <th>Faculty</th>
+                <th>Specialty</th>
+                <th>Educational Level</th>
+            </tr>
+            <tr th:each="group : ${allGroups}">
+                <td th:utext="${group.id}">..</td>
+                <td th:utext="${group.number}">..</td>
+                <td th:utext="${group.educationalProgram}">..</td>
+                <td th:utext="${group.faculty}">..</td>
+                <td th:utext="${group.specialty}">..</td>
+                <td th:utext="${group.level}">..</td>
+            </tr>
+        </table>
+    </div>
+
+    <div id="publisherTable" class="data-table" style="display:none;">
+        <h3>Publishers</h3>
+        <input type="text" id="publisherSearch" placeholder="Search by name or country" onkeyup="searchTable('publisherTable', 'publisherSearch')" class="form-control" />
+        <table class="table table-hover">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Quartile</th>
+                <th>Country</th>
+            </tr>
+            <tr th:each="publisher : ${allPublishers}">
+                <td th:utext="${publisher.id}">..</td>
+                <td th:utext="${publisher.name}">..</td>
+                <td th:utext="${publisher.quartile}">..</td>
+                <td th:utext="${publisher.country}">..</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<script>
+    function toggleTable() {
+        const selectedValue = document.getElementById("dataSelect").value;
+        const tables = document.querySelectorAll('.data-table');
+
+        tables.forEach(table => {
+            table.style.display = 'none'; // Hide all tables
+        });
+
+        if (selectedValue === "students") {
+            document.getElementById("studentTable").style.display = "block";
+        } else if (selectedValue === "publications") {
+            document.getElementById("publicationTable").style.display = "block";
+        } else if ( selectedValue === "abstracts") {
+            document.getElementById("abstractTable").style.display = "block";
+        } else if (selectedValue === "conferences") {
+            document.getElementById("conferenceTable").style.display = "block";
+        } else if (selectedValue === "advisors") {
+            document.getElementById("advisorTable").style.display = "block";
+        } else if (selectedValue === "groups") {
+            document.getElementById("groupTable").style.display = "block";
+        } else if (selectedValue === "publishers") {
+            document.getElementById("publisherTable").style.display = "block";
+        }
+    }
+
+    function searchTable(tableId, searchId) {
+        const input = document.getElementById(searchId);
+        const filter = input.value.toLowerCase();
+        const table = document.getElementById(tableId);
+        const rows = table.getElementsByTagName("tr");
+
+        for (let i = 1; i < rows.length; i++) {
+            const cells = rows[i].getElementsByTagName("td");
+            let rowContainsSearchTerm = false;
+
+            for (let j = 0; j < cells.length; j++) {
+                if (cells[j]) {
+                    const cellText = cells[j].textContent || cells[j].innerText;
+                    if (cellText.toLowerCase().indexOf(filter) > -1) {
+                        rowContainsSearchTerm = true;
+                        break;
+                    }
+                }
+            }
+            rows[i].style.display = rowContainsSearchTerm ? "" : "none";
+        }
+    }
+</script>
+</body>
+<footer>
+    <p>Kharkiv city, Ukraine<br>
+        Tel: +381234567890<br>
+        Email: qwerty@gmail.com<br><br>
+        &copy; 2024 SWManager. All rights reserved.</p>
+    <p>Powered by OneNureStudent &#128572;</p>
+</footer>
+</html>

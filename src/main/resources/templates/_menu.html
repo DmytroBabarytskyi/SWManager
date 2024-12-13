@@ -1,0 +1,81 @@
+<!-- Щоб зробити застосунок красивішим тут (у спільному для всіх сторінок блоці)
+    описані загальні стилі веб-застосунку -->
+<style>
+    header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        background: #000407;
+        color: #f5f7f7;
+        padding: 10px 20px;
+        text-align: center;
+        width: 100%;
+    }
+
+    nav{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-self: center;
+        justify-content: space-around;
+        font-size: large;
+        width: 100%;
+        padding-top: 20px;
+        background-color: #000407;
+    }
+    /* Стилі для панелі пермикання між сторінками сайту */
+    .navbar {
+        list-style-type: none;
+        padding: 0;
+    }
+    .navbar li {
+        display: inline;
+        margin-right: 30px;
+    }
+    .navbar a{
+        color: #EDB518;
+        display: inline-block;
+        padding: 10px 15px;
+        border: 2px solid #EDB518;
+        border-radius: 15px;
+    }
+    .navbar a:hover{
+        background-color: #EDB518;
+    }
+
+    a {
+        color: #007BFF;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    a:hover {
+        color: white;
+    }
+    footer {
+        text-align: center;
+        justify-content: center;
+        padding: 10px;
+        background: #000407;
+        color: #f5f7f7;
+        position: relative;
+        bottom: 0;
+        width: 100%;
+        height: 170px;
+        clear: both;
+        margin-top: auto;
+    }
+</style>
+
+<nav>
+    <img src="/logo.png" alt="SCIENTIFIC MANAGER">
+    <ul class="navbar">
+        <li><a th:href="@{/home}">Home</a></li>
+        <li><a th:href="@{/search}">Search</a></li>
+        <li><a th:href="@{/add}">Add</a></li>
+        <li><a th:href="@{/delete}">Delete</a></li>
+        <li><a th:href="@{/calculate}">Calculate</a></li>
+    </ul>
+</nav>

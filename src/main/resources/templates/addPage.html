@@ -1,0 +1,308 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+   <head>
+      <title>Add</title>
+            <meta charset="UTF-8"/>
+     
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+       
+      <!-- See configuration in WebMvConfig.java -->
+      <link th:href="@{/bootstrap/css/bootstrap.min.css}"
+                rel="stylesheet" media="screen"/>
+                 
+        
+      <script th:src="@{/jquery/jquery.min.js}"></script>  
+      <script th:src="@{/popper/popper.min.js}"></script>  
+      <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+
+	   <style>
+		   button {
+			   margin: 0 10px;
+			   padding: 10px 20px;
+			   background-color: #EDB518;
+			   color: white;
+			   border: none;
+			   border-radius: 5px;
+			   cursor: pointer;
+		   }
+		   button:hover {
+			   background-color: #EDA018;
+		   }
+		   .form-container {
+			   flex-direction: column;
+			   align-items: center;
+			   border: 1px solid #ccc;
+			   padding: 20px;
+			   border-radius: 5px;
+		   }
+		   input[type="text"] {
+			   padding: 10px;
+			   margin-bottom: 10px;
+			   border: 1px solid #ccc;
+			   border-radius: 5px;
+		   }
+		   input[type="submit"] {
+			   padding: 10px 20px;
+			   background-color: #EDB518;
+			   color: white;
+			   border: none;
+			   border-radius: 5px;
+			   cursor: pointer;
+		   }
+		   input[type="submit"]:hover {
+			   background-color: #EDA018;
+		   }
+	   </style>
+   </head>
+   
+   <body>      
+      <!-- Include _menu.html -->
+      <th:block th:include="/_menu"></th:block>
+
+   <!--    <div th:if="${errorMessage!=null}"
+           style="color:red;font-style:italic" th:utext="${errorMessage}">..</div> -->
+
+	  <div class="container">
+		  <div class="form-container" style="margin-top: 30px">
+			  <h2>Add Object</h2>
+
+			  <!-- Data Type Selector -->
+			  <label for="dataType">Select Data Type:</label>
+			  <select id="dataType" name="dataType" onchange="toggleAddForm()">
+				  <option value="students">Students</option>
+				  <option value="publications">Publications</option>
+				  <option value="abstracts">Abstract</option>
+				  <option value="conferences">Conferences</option>
+				  <option value="advisors">Research Advisors</option>
+				  <option value="groups">Groups</option>
+				  <option value="publishers">Publishers</option>
+			  </select>
+
+			  <!-- Student Add Form -->
+			  <form id="studentAdd" th:action="@{/add}" th:object="${addStudentForm}" method="POST">
+				  <input type="hidden" id="hiddenStudentType" name="dataType" value="students" />
+				  <div class="form-group">
+					  <label for="name">Name</label>
+					  <input type="text" id="name" class="form-control" placeholder="Enter Name" th:field="*{name}" />
+				  </div>
+				  <div class="form-group">
+					  <label for="surname">Surname</label>
+					  <input type="text" id="surname" class="form-control" placeholder="Enter Surname" th:field="*{surname}" />
+				  </div>
+				  <div class="form-group">
+					  <label for="phoneNumber">Phone Number</label>
+					  <input type="text" id="phoneNumber" class="form-control" placeholder="Enter Phone Number" th:field="*{phoneNumber}" />
+				  </div>
+				  <div class="form-group">
+					  <label for="email">Email</label>
+					  <input type="text" id="email" class="form-control" placeholder="Enter Email" th:field="*{email}" />
+				  </div>
+				  <div class="form-group">
+					  <label for="group-number">Group Number</label>
+					  <select id="group-number" class="form-control" name="group.id" th:field="*{group}">
+						  <option th:each="group : ${allGroups}" th:value="${group.id}" th:text="${group.number}"></option>
+					  </select>
+				  </div>
+				  <div class="form-group">
+					  <label for="numberOfWorks">Number of Works</label>
+					  <input type="text" id="numberOfWorks" class="form-control" placeholder="Enter Number of Works" th:field="*{numberOfWorks}" />
+				  </div>
+				  <input type="submit" class="btn btn-success" value="Add" />
+			  </form>
+
+			  <!-- Publication Add Form -->
+			  <form id="publicationAdd" th:action="@{/add}" th:object="${addPublicationForm}" method="POST" style="display: none">
+				  <input type="hidden" id="hiddenPublicationType" name="dataType" value="publications" />
+				  <div class="form-group">
+					  <label for="topic">Topic</label>
+					  <input type="text" id="topic" class="form-control" placeholder="Enter Topic" th:field="*{topic}" />
+				  </div>
+				  <div class="form-group">
+					  <label for="author">Author</label>
+					  <select id="author" class="form-control" name="author.id" th:field="*{author}">
+						  <option th:each="author : ${allStudents}" th:value="${author.id}" th:text="${author.name + ' ' + author.surname}"></option>
+					  </select>
+				  </div>
+				  <div class="form-group">
+					  <label for="advisor">Research Advisor</label>
+					  <select id="advisor" class="form-control" name="advisor.id" th:field="*{advisor}">
+						  <option th:each="advisor : ${allResearchAdvisors}" th:value="${advisor.id}" th:text="${advisor.name + ' ' + advisor.surname}"></option>
+					  </select>
+				  </div>
+				  <div class="form-group">
+					  <label for="publisher">Publisher</label>
+					  <select id="publisher" class="form-control" name="publisher.id" th:field="*{publisher}">
+						  <option th:each="publisher : ${allPublishers}" th:value="${publisher.id}" th:text="${publisher.name}"></option>
+					  </select>
+				  </div>
+				  <div class="form-group">
+					  <label for="journal">Journal Number</label>
+					  <input type="text" id="journal" class="form-control" placeholder="Enter Journal Number" th:field="*{publicationNumber}" />
+				  </div>
+				  <div class="form-group">
+					  <label for="publication-date">Publication Date</label>
+					  <input type="date" id="publication-date" class="form-control" placeholder="Enter Publication Date" th:field="*{publicationDate}" />
+				  </div>
+				  <input type="submit" class="btn btn-success" value="Add" />
+			  </form>
+
+			  <form id="abstractAdd" th:action="@{/add}" th:object="${addAbstractForm}" method="POST" style="display: none">
+				  <input type="hidden" id="hiddenAbstractType" name="dataType" value="abstracts" />
+				  <div class="form-group">
+					  <label for="topic-abstract">Topic</label>
+					  <input type="text" id="topic-abstract" class="form-control" placeholder="Enter Topic" th:field="*{topic}" />
+				  </div>
+				  <div class="form-group">
+					  <label for="author-abstract">Author</label>
+					  <select id="author-abstract" class="form-control" name="author.id" th:field="*{author}">
+						  <option th:each="author : ${allStudents}" th:value="${author.id}" th:text="${author.name + ' ' + author.surname}"></option>
+					  </select>
+				  </div>
+				  <div class="form-group">
+					  <label for="advisor-abstract">Research Advisor</label>
+					  <select id="advisor-abstract" class="form-control" name="advisor.id" th:field="*{advisor}">
+						  <option th:each="advisor : ${allResearchAdvisors}" th:value="${advisor.id}" th:text="${advisor.name + ' ' + advisor.surname}"></option>
+					  </select>
+				  </div>
+				  <div class="form-group">
+					  <label for="conference">Conference</label>
+					  <select id="conference" class="form-control" name="publisher.id" th:field="*{conference}">
+						  <option th:each="conference : ${allConferences}" th:value="${conference.id}" th:text="${conference.name}"></option>
+					  </select>
+				  </div>
+				  <input type="submit" class="btn btn-success" value="Add" />
+			  </form>
+
+			  <form id="conferenceAdd" th:action="@{/add}" th:object="${addConferenceForm}" method="POST" style="display: none">
+				  <input type="hidden" id="hiddenConferenceType" name="dataType" value="conferences" />
+				  <div class="form-group">
+					  <label for="conference-name">Conference Name</label>
+					  <input type="text" id="conference-name" class="form-control" placeholder="Enter Conference Name" th:field="*{name}" />
+				  </div>
+				  <div class="form-group">
+					  <label for="conference-start-date">Start Date</label>
+					  <input type="date" id="conference-start-date" class="form-control" placeholder="Enter Start Date" th:field="*{startDate}" />
+				  </div>
+				  <div class="form-group">
+					  <label for="conference-end-date">End Date</label>
+					  <input type="date" id="conference-end-date" class="form-control" placeholder="Enter End Date" th:field="*{endDate}" />
+				  </div>
+				  <div class="form-group">
+					  <label for="conference-type">Conference Type</label>
+					  <select id="conference-type" class="form-control" name="type.id" th:field="*{type}">
+						  <option th:each="type : ${conferenceTypesList}" th:value="${type.id}" th:text="${type.name}"></option>
+					  </select>
+				  </div>
+				  <div class="form-group">
+					  <label for="conference-state">Conference State</label>
+					  <select id="conference-state" class="form-control" name="state.id" th:field="*{state}">
+						  <option th:each="state : ${conferenceStatesList}" th:value="${state.id}" th:text="${state.name}"></option>
+					  </select>
+				  </div>
+				  <input type="submit" class="btn btn-success" value="Add" />
+			  </form>
+
+			  <form id="advisorAdd" th:action="@{/add}" th:object="${addResearchForm}" method="POST" style="display: none">
+				  <input type="hidden" id="hiddenAdvisorType" name="dataType" value="advisers" />
+				  <div class="form-group">
+					  <label for="name">Name</label>
+					  <input type="text" id="name-advisor" class="form-control" placeholder="Enter Name" th:field="*{name}" />
+				  </div>
+				  <div class="form-group">
+					  <label for="surname">Surname</label>
+					  <input type="text" id="surname-advisor" class="form-control" placeholder="Enter Surname" th:field="*{surname}" />
+				  </div>
+				  <div class="form-group">
+					  <label for="phoneNumber">Phone Number</label>
+					  <input type="text" id="phoneNumber-advisor" class="form-control" placeholder="Enter Phone Number" th:field="*{phoneNumber}" />
+				  </div>
+				  <div class="form-group">
+					  <label for="email">Email</label>
+					  <input type="text" id="email-advisor" class="form-control" placeholder="Enter Email" th:field="*{email}" />
+				  </div>
+				  <div class="form-group">
+					  <label for="faculty-adviser">Faculty</label>
+					  <select id="faculty-adviser" class="form-control" name="faculty.id" th:field="*{faculty}">
+						  <option th:each="faculty : ${facultiesList}" th:value="${faculty.id}" th:text="${faculty.name}"></option>
+					  </select>
+				  </div>
+				  <div class="form-group">
+					  <label for="numberOfWorks-advisor">Number of Works</label>
+					  <input type="text" id="numberOfWorks-advisor" class="form-control" placeholder="Enter Number of Works" th:field="*{numberOfWorks}" />
+				  </div>
+				  <input type="submit" class="btn btn-success" value="Add" />
+			  </form>
+
+			  <form id="groupsAdd" th:action="@{/add}" th:object="${addGroupForm}" method="POST" style="display: none">
+				  <input type="hidden" id="hiddenGroupType" name="dataType" value="groups" />
+				  <div class="form-group">
+					  <label for="group-number-name">Group Number</label>
+					  <input type="text" id="group-number-name" class="form-control" placeholder="Enter Group Number" th:field="*{number}" />
+				  </div>
+				  <div class="form-group">
+					  <label for="program-group">Educational Program</label>
+					  <select id="program-group" class="form-control" name="faculty.id" th:field="*{program}">
+						  <option th:each="program : ${programsList}" th:value="${program.id}" th:text="${program.name}"></option>
+					  </select>
+				  </div>
+				  <div class="form-group">
+					  <label for="faculty-group">Faculty</label>
+					  <select id="faculty-group" class="form-control" name="faculty.id" th:field="*{faculty}">
+						  <option th:each="faculty : ${facultiesList}" th:value="${faculty.id}" th:text="${faculty.name}"></option>
+					  </select>
+				  </div>
+				  <input type="submit" class="btn btn-success" value="Add" />
+			  </form>
+
+			  <form id="publisherAdd" th:action="@{/add}" th:object="${addPublisherForm}" method="POST" style="display: none">
+				  <input type="hidden" id="hiddenPublisherType" name="dataType" value="publishers" />
+				  <div class="form-group">
+					  <label for="publisher-name">Publisher Name</label>
+					  <input type="text" id="publisher-name" class="form-control" placeholder="Enter Publisher Name" th:field="*{name}" />
+				  </div>
+				  <div class="form-group">
+					  <label for="publisher-quartile">Publisher Quartile</label>
+					  <select id="publisher-quartile" class="form-control" name="faculty.id" th:field="*{quartile}">
+						  <option th:each="quartile : ${quartilesList}" th:value="${quartile.id}" th:text="${quartile.name}"></option>
+					  </select>
+				  </div>
+				  <div class="form-group">
+					  <label for="publisher-country">Publisher Country</label>
+					  <select id="publisher-country" class="form-control" name="faculty.id" th:field="*{country}">
+						  <option th:each="country : ${countriesList}" th:value="${country.id}" th:text="${country.name}"></option>
+					  </select>
+				  </div>
+				  <input type="submit" class="btn btn-success" value="Add" />
+			  </form>
+		  </div>
+	  </div>
+
+
+	  <script>
+		  function toggleAddForm() {
+			  const selectedValue = document.getElementById("dataType").value;
+			  const forms = document.querySelectorAll('form');
+
+			  forms.forEach(form => {
+				  form.style.display = 'none'; // Hide all tables
+			  });
+
+			  if (selectedValue === "students") {
+				  document.getElementById("studentAdd").style.display = "block";
+			  } else if (selectedValue === "publications") {
+				  document.getElementById("publicationAdd").style.display = "block";
+			  } else if ( selectedValue === "abstracts") {
+				  document.getElementById("abstractAdd").style.display = "block";
+			  } else if (selectedValue === "conferences") {
+				  document.getElementById("conferenceAdd").style.display = "block";
+			  } else if (selectedValue === "advisors") {
+				  document.getElementById("advisorAdd").style.display = "block";
+			  } else if (selectedValue === "groups") {
+				  document.getElementById("groupsAdd").style.display = "block";
+			  } else if (selectedValue === "publishers") {
+				  document.getElementById("publisherAdd").style.display = "block";
+			  }
+		  }
+	  </script>
+   </body>
+</html>

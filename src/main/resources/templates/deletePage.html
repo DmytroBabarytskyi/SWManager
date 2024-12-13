@@ -1,0 +1,190 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Delete</title>
+    <meta charset="UTF-8"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- See configuration in WebMvConfig.java -->
+    <link th:href="@{/bootstrap/css/bootstrap.min.css}"
+          rel="stylesheet" media="screen"/>
+
+
+    <script th:src="@{/jquery/jquery.min.js}"></script>
+    <script th:src="@{/popper/popper.min.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+
+    <style>
+        button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            background-color: #EDB518;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #EDA018;
+        }
+        .form-container {
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        input[type="text"] {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #EDB518;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        input[type="submit"]:hover {
+            background-color: #EDA018;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- Include _menu.html -->
+<th:block th:include="/_menu"></th:block>
+
+<div class="form-container" id="delete-form" style="margin-top: 30px">
+    <h2>Delete Object</h2>
+    <label for="object-type-delete">Select Data Type:</label>
+    <select id="object-type-delete" name="object-type" onchange="toggleDeleteForm()">
+        <option value="students">Students</option>
+        <option value="publications">Publications</option>
+        <option value="abstracts">Abstract</option>
+        <option value="conferences">Conferences</option>
+        <option value="advisors">Research Advisors</option>
+        <option value="groups">Groups</option>
+        <option value="publishers">Publishers</option>
+    </select>
+
+    <form id="studentDelete" th:action="@{/delete}" th:object="${deleteForm}" method="POST">
+        <input type="hidden" id="hiddenStudentType-delete" name="dataType" value="students" />
+        <div class="form-group">
+            <label for="student-id">Student ID:</label>
+            <select id="student-id" class="form-control" name="student.id" th:field="*{ID}">
+                <option th:each="student : ${allStudents}" th:value="${student.id}" th:text="${student.name + ' ' + student.surname}"></option>
+            </select>
+            <input type="submit" class="btn btn-success" value="Delete" onclick="confirmDelete('student-id')">
+        </div>
+    </form>
+
+    <form id="publicationDelete" th:action="@{/delete}" th:object="${deleteForm}" method="POST" style="display: none">
+        <input type="hidden" id="hiddenPublicationType-delete" name="dataType" value="publications" />
+        <div class="form-group">
+            <label for="publication-id">Publication ID:</label>
+            <select id="publication-id" class="form-control" name="publication.id" th:field="*{ID}">
+                <option th:each="publication : ${allPublications}" th:value="${publication.id}" th:text="${publication.topic}"></option>
+            </select>
+            <input type="submit" class="btn btn-success" value="Delete" onclick="confirmDelete('publication-id')">
+        </div>
+    </form>
+
+    <form id="abstractDelete" th:action="@{/delete}" th:object="${deleteForm}" method="POST" style="display: none">
+        <input type="hidden" id="hiddenAbstractType-delete" name="dataType" value="abstracts" />
+        <div class="form-group">
+            <label for="abstract-id">Abstract Topic:</label>
+            <select id="abstract-id" class="form-control" name="abstract.id" th:field="*{ID}">
+                <option th:each="abstract : ${allAbstracts}" th:value="${abstract.id}" th:text="${abstract.topic}"></option>
+            </select>
+            <input type="submit" class="btn btn-success" value="Delete" onclick="confirmDelete('abstract-id')">
+        </div>
+    </form>
+
+    <form id="conferenceDelete" th:action="@{/delete}" th:object="${deleteForm}" method="POST" style="display: none">
+        <input type="hidden" id="hiddenConferenceType-delete" name="dataType" value="conferences" />
+        <div class="form-group">
+            <label for="conference-id">Conference Name:</label>
+            <select id="conference-id" class="form-control" name="conference.id" th:field="*{ID}">
+                <option th:each="conference : ${allConferences}" th:value="${conference.id}" th:text="${conference.name}"></option>
+            </select>
+            <input type="submit" class="btn btn-success" value="Delete" onclick="confirmDelete('conference-id')">
+        </div>
+    </form>
+
+    <form id="advisorDelete" th:action="@{/delete}" th:object="${deleteForm}" method="POST" style="display: none">
+        <input type="hidden" id="hiddenAdvisorType-delete" name="dataType" value="advisers" />
+        <div class="form-group">
+            <label for="advisor-id">Advisor Full Name:</label>
+            <select id="advisor-id" class="form-control" name="advisor.id" th:field="*{ID}">
+                <option th:each="advisor : ${allResearchAdvisors}" th:value="${advisor.id}" th:text="${advisor.name + ' ' + advisor.surname}"></option>
+            </select>
+            <input type="submit" class="btn btn-success" value="Delete" onclick="confirmDelete('advisor-id')">
+        </div>
+    </form>
+
+    <form id="groupsDelete" th:action="@{/delete}" th:object="${deleteForm}" method="POST" style="display: none">
+        <input type="hidden" id="hiddenGroupType-delete" name="dataType" value="groups" />
+        <div class="form-group">
+            <label for="group-id">Group Number:</label>
+            <select id="group-id" class="form-control" name="group.id" th:field="*{ID}">
+                <option th:each="group : ${allGroups}" th:value="${group.id}" th:text="${group.number}"></option>
+            </select>
+            <input type="submit" class="btn btn-success" value="Delete" onclick="confirmDelete('group-id')">
+        </div>
+    </form>
+
+    <form id="publisherDelete" th:action="@{/delete}" th:object="${deleteForm}" method="POST" style="display: none">
+        <input type="hidden" id="hiddenPublisherType-delete" name="dataType" value="publishers" />
+        <div class="form-group">
+            <label for="publisher-id">Publisher Name:</label>
+            <select id="publisher-id" class="form-control" name="publisher.id" th:field="*{ID}">
+                <option th:each="publisher : ${allPublishers}" th:value="${publisher.id}" th:text="${publisher.name}"></option>
+            </select>
+            <input type="submit" class="btn btn-success" value="Delete" onclick="confirmDelete('publisher-id')">
+        </div>
+    </form>
+</div>
+
+<script>
+    function confirmDelete(objectId) {
+        const value = document.getElementById(objectId).value;
+        const confirmation = confirm(`Are you sure you want to delete the object with ID: ${value}?`);
+        if (!confirmation) {
+            event.preventDefault(); // Prevent form submission if not confirmed
+        }
+    }
+
+    function toggleDeleteForm() {
+        const selectedValue = document.getElementById("object-type-delete").value;
+        const forms = document.querySelectorAll('form');
+
+        forms.forEach(form => {
+            form.style.display = 'none'; // Hide all tables
+        });
+
+        if (selectedValue === "students") {
+            document.getElementById("studentDelete").style.display = "block";
+        } else if (selectedValue === "publications") {
+            document.getElementById("publicationDelete").style.display = "block";
+        } else if ( selectedValue === "abstracts") {
+            document.getElementById("abstractDelete").style.display = "block";
+        } else if (selectedValue === "conferences") {
+            document.getElementById("conferenceDelete").style.display = "block";
+        } else if (selectedValue === "advisors") {
+            document.getElementById("advisorDelete").style.display = "block";
+        } else if (selectedValue === "groups") {
+            document.getElementById("groupsDelete").style.display = "block";
+        } else if (selectedValue === "publishers") {
+            document.getElementById("publisherDelete").style.display = "block";
+        }
+    }
+</script>
+</body>
+</html>

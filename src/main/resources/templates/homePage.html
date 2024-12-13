@@ -1,0 +1,86 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>SWManager</title>
+
+    <meta charset="UTF-8"/>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- See configuration in WebMvConfig.java -->
+    <link th:href="@{/bootstrap/css/bootstrap.min.css}"
+          rel="stylesheet" media="screen"/>
+
+
+    <script th:src="@{/jquery/jquery.min.js}"></script>
+    <script th:src="@{/popper/popper.min.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+
+    <style>
+        .container {
+            height: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: #EDB518;
+            color: #000407;
+            border-radius: 15px;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .container:hover{
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.3);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <!-- Include _menu.html -->
+    <th:block th:include="/_menu"></th:block>
+
+    <div class="container">
+        <h2>WELCOME!</h2>
+        <p>At "Scientific Manager", we are dedicated to advancing the field of scientific research through innovative
+            accounting practices tailored specifically for the unique needs of the scientific community.
+            Our mission is to provide researchers, institutions, and organizations with the tools, resources,
+            and expertise necessary to manage their financial activities effectively, ensuring that every dollar
+            spent contributes to groundbreaking discoveries and advancements.<br><br>
+        </p>
+    </div>
+
+    <div class="container">
+        <h2>JOIN OUR TEAM!</h2>
+        <p>
+            Are you passionate about the intersection of science and finance? Do you want to be part of a dynamic
+            team dedicated to supporting groundbreaking research through innovative accounting solutions?
+            At "Scientific Manager", we are always on the lookout for talented individuals who share our commitment
+            to excellence and integrity in scientific work accounting.<br><br>
+
+            We offer a range of career opportunities across various roles, including financial analysts, grant managers,
+            compliance specialists, and more. Our team members enjoy competitive salaries, comprehensive benefits,
+            and the chance to work in a culture that prioritizes collaboration, respect, and professional development.<br><br>
+        </p>
+    </div>
+
+    <div class="container">
+        <h2>REMEMBER</h2>
+        <ol>
+            <li><p>Focus on Impact: Every task we undertake contributes to the larger mission of supporting scientific research. Keep in mind the significance of your work and how it empowers researchers to make groundbreaking discoveries.</p></li>
+            <li><p>Embrace Continuous Learning: The landscape of research funding and financial management is always evolving. Stay curious, seek out new knowledge, and be open to feedback. Growth comes from learning and adapting.</p></li>
+            <li><p>Diversity Drives Innovation: Remember that diverse perspectives foster creativity and lead to better solutions. Embrace differences and encourage an inclusive environment where everyone feels valued and heard.</p></li>
+            <li><p>Prioritize Well-Being: Our work is important, but so is your health and happiness. Remember to take breaks, seek support when needed, and maintain a healthy work-life balance. A well-rested mind is more productive and creative.</p></li>
+        </ol>
+    </div>
+
+</body>
+<footer>
+    <p>Kharkiv city, Ukraine<br>
+        Tel: +381234567890<br>
+        Email: qwerty@gmail.com<br><br>
+        &copy; 2024 SWManager. All rights reserved.</p>
+    <p>Powered by OneNureStudent &#128572;</p>
+</footer>
+</html>

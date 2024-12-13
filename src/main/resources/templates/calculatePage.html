@@ -1,0 +1,150 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Search</title>
+
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <link th:href="@{/bootstrap/css/bootstrap.min.css}" rel="stylesheet" media="screen"/>
+    <script th:src="@{/jquery/jquery.min.js}"></script>
+    <script th:src="@{/popper/popper.min.js}"></script>
+    <script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+
+    <style>
+        button {
+            margin: 0 10px;
+            padding: 10px 20px;
+            background-color: #EDB518;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #EDA018;
+        }
+        .form-container {
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        input[type="text"], input[type="number"] {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #EDB518;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-bottom: 30px;
+        }
+        input[type="submit"]:hover {
+            background-color: #EDA018;
+        }
+        #resultModal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            z-index: 1050;
+        }
+        #resultModal .close-btn {
+            background: #EDB518;
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+
+<body>
+<th:block th:include="/_menu"></th:block>
+
+<div class="container">
+    <h2>Calculate Extra Points</h2>
+
+    <form id="calculate" th:action="@{/calculate}" th:object="${calculateForm}" method="POST" onsubmit="return calculate(event);">
+        <input type="hidden" id="hiddenStudentType" name="dataType" value="students" />
+        <div class="form-group">
+            <label for="student-to-calculate">Student</label>
+            <select id="student-to-calculate" class="form-control" name="student.id" th:field="*{studentID}">
+                <option th:each="student : ${allStudents}" th:value="${student.id}" th:text="${student.name + ' ' + student.surname}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="max">MAX Extra Points</label>
+            <input type="number" id="max" class="form-control" placeholder="Enter MAX Extra Points" th:field="*{maxExtraPoints}" />
+        </div>
+        <div class="form-group">
+            <label for="Q1">Q1 Extra Points</label>
+            <input type="number" id="Q1" class="form-control" placeholder="Enter Extra Points for Works with Q1 quartile" th:field="*{Q1}" />
+        </div>
+        <div class="form-group">
+            <label for="Q2">Q2 Extra Points</label>
+            <input type="number" id="Q2" class="form-control" placeholder="Enter Extra Points for Works with Q2 quartile" th:field="*{Q2}" />
+        </div>
+        <div class="form-group">
+            <label for="Q3">Q3 Extra Points</label>
+            <input type="number" id="Q3" class="form-control" placeholder="Enter Extra Points for Works with Q3 quartile" th:field="*{Q3}" />
+        </div>
+        <div class="form-group">
+            <label for="Q4">Q4 Extra Points</label>
+            <input type="number" id="Q4" class="form-control" placeholder="Enter Extra Points for Works with Q4 quartile" th:field="*{Q4}" />
+        </div>
+        <div class="form-group">
+            <label for="abstract-points">Abstract Extra Points</label>
+            <input type="number" id="abstract-points" class="form-control" placeholder="Enter Extra Points for Abstract" th:field="*{anAbstract}" />
+        </div>
+        <input type="submit" class="btn btn-success" value="Calculate" />
+    </form>
+</div>
+
+<div id="resultModal">
+    <h4>Calculation Result</h4>
+    <p>Total Extra Points: <span id="resultValue"></span></p>
+    <button class="close-btn" onclick="closeModal()">Close</button>
+</div>
+
+<script>
+    function calculate(event) {
+        event.preventDefault();
+        fetch(event.target.action, {
+            method: 'POST',
+            body: new FormData(event.target)
+        })
+            .then(response => response.text())
+            .then(result => {
+                document.getElementById('resultValue').textContent = result;
+                document.getElementById('resultModal').style.display = 'block';
+            });
+    }
+    function closeModal() {
+        document.getElementById('resultModal').style.display = 'none';
+    }
+</script>
+
+</body>
+<footer>
+    <p>Kharkiv city, Ukraine<br>
+        Tel: +381234567890<br>
+        Email: qwerty@gmail.com<br><br>
+        &copy; 2024 SWManager. All rights reserved.</p>
+    <p>Powered by OneNureStudent &#128572;</p>
+</footer>
+</html>
